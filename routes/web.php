@@ -16,6 +16,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function(){
+    return view('navegar');
+});
+
+Route::get('/cadastrar-produto', function(){
     return view('cadastrar');
 });
 
@@ -26,12 +30,23 @@ Route::post('/cadastrar-produto', function(Request $request){
         'estoque' => $request->estoque
     ]);
 
-    echo 'Produto criado com sucesso';
+    return view('navegar');
 });
 
-Route::get('/listar-produto/{id}',function($id){
+Route::get('/listar-produto', function(){
+    return view('Select');
+    if($produto){
+        return view('Listar', ['produto' => $produto]);
+    }
+    return view('navegar');
+});
+
+Route::get('/listar-produto/{id}', function($id){
     $produto = Produto::find($id);
-    return view('Listar', ['produto' => $produto]);
+});
+
+Route::get('/editar-produto', function(){
+    return view('Select');
 });
 
 Route::get('/editar-produto/{id}',function($id){
@@ -48,11 +63,15 @@ Route::Post('/editar-produto/{id}',function(Request $request, $id){
         'estoque' => $request->estoque,
     ]);
 
-    echo "Produto alterado com sucesso";
+    return view('cadastrar');
+});
+
+Route::get('/excluir-produto', function(){
+    return view('Select');
 });
 
 Route::get('/excluir-produto/{id}',function($id){
     $produto = Produto::find($id);
     $produto->delete();
-    echo("Produto excluido com sucesso!");
+    return view('cadastrar');
 });
